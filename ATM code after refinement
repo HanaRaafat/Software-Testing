@@ -1,0 +1,194 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Client {
+string name;
+int pin;
+double balance;
+bool blocked = false;
+};
+
+Client clients[10];
+int clientCount = 0;
+
+bool validatePIN(Client& user) {
+int attempts = 0, inputPin;
+while (attempts < 3) {
+cout << "Enter your PIN: ";
+cin >> inputPin;
+if (inputPin == user.pin)
+return true;
+else {
+attempts++;
+cout << "Incorrect PIN.\n";
+}
+}
+user.blocked = true;
+cout << "Account blocked after 3 failed attempts.\n";
+return false;
+}
+
+void showBalance(Client& user) {
+cout << "Your current balance is: $" << user.balance << "\n";
+}
+
+void withdraw(Client& user) {
+const int maxWithdrawal = 2000;
+int amount, unit;
+
+cout << "Enter withdrawal amount (<=2000): ";
+cin >> amount;
+
+if (amount > user.balance || amount > maxWithdrawal || amount % 50 != 0) {
+cout << "Invalid amount. Either exceeds balance, daily limit, or not a valid denomination.\n";
+return;
+}
+
+cout << "Select denomination (50/100/200): ";
+cin >> unit;
+if (unit != 50 && unit != 100 && unit != 200) {
+cout << "Invalid denomination selected.\n";
+return;
+}
+
+if (amount % unit != 0) {
+cout << "Amount not divisible by selected unit.\n";
+return;
+}
+
+user.balance -= amount;
+cout << "Withdrawal successful. $" << amount << " dispensed in $" << unit << " units.\n";
+showBalance(user);
+}
+
+void transfer(Client& sender) {
+string recipientName;
+int amount;
+bool found = false;
+Client* recipient = nullptr;
+
+cout << "Enter recipient name: ";
+cin >> recipientName;
+
+for (int i = 0; i < clientCount; ++i) {
+if (clients[i].name == recipientName && !clients[i].blocked) {
+recipient = &clients[i];
+found = true;
+break;
+}
+}
+
+if (!found) {
+cout << "Recipient not found or is blocked.\n";
+return;
+}
+
+cout << "Enter amount to transfer (<=10000): ";
+cin >> amount;
+
+if (amount > 10000 || amount > sender.balance) {
+cout << "Transfer failed. Amount exceeds limit or balance.\n";
+return;
+}
+
+sender.balance -= amount;
+recipient->balance += amount;
+
+cout << "Transfer successful. $" << amount << " transferred to " << recipient->name << ".\n";
+showBalance(sender);
+}
+
+void clientMenu(Client& user) {
+int option;
+string repeat;
+do {
+cout << "\nChoose:\n1. Balance\n2. Withdraw\n3. Transfer\n4. Exit\nOption: ";
+cin >> option;
+
+switch (option) {
+case 1: showBalance(user); break;
+case 2: withdraw(user); break;
+case 3: transfer(user); break;
+case 4: return;
+default: cout << "Invalid option.\n";
+}
+
+cout << "Perform another operation? (yes/no): ";
+cin >> repeat;
+} while (repeat == "yes");
+}
+
+void registerClient() {
+if (clientCount >= 10) {
+cout << "Client limit reached.\n";
+return;
+}
+
+Client newClient;
+string confirmName;
+int confirmPin;
+
+cout << "Enter your name: ";
+cin >> newClient.name;
+
+cout << "Enter initial balance: ";
+cin >> newClient.balance;
+
+do {
+cout << "Set PIN: ";
+cin >> newClient.pin;
+cout << "Confirm PIN: ";
+cin >> confirmPin;
+
+if (newClient.pin != confirmPin) {
+cout << "PINs do not match. Try again.\n";
+}
+} while (newClient.pin != confirmPin);
+
+clients[clientCount++] = newClient;
+cout << "Account created. Please login.\n";
+}
+
+void login() {
+string name;
+int pin;
+
+cout << "Name: ";
+cin >> name;
+
+cout << "PIN: ";
+cin >> pin;
+
+for (int i = 0; i < clientCount; ++i) {
+if (clients[i].name == name && clients[i].pin == pin) {
+if (clients[i].blocked) {
+cout << "Your account is blocked. Contact support.\n";
+return;
+}
+
+if (validatePIN(clients[i])) {
+cout << "Login successful. Welcome " << clients[i].name << "!\n";
+clientMenu(clients[i]);
+}
+return;
+}
+}
+cout << "Invalid credentials.\n";
+}
+
+int main() {
+string choice;
+
+while (true) {
+cout << "\nAre you a new client? (yes/no/exit): ";
+cin >> choice;
+
+if (choice == "yes") registerClient();
+else if (choice == "no") login();
+else if (choice == "exit") break;
+else cout << "Invalid input.\n";
+}
+
+return 0;
+}
