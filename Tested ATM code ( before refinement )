@@ -1,0 +1,419 @@
+#include<iostream>
+using namespace std;
+#include<string.h>
+
+struct client
+{
+string name;
+int pin;
+double balance;
+bool block=0;
+}c[10];//for balance
+int balance(int e){
+cout<<"Your current balance is: "<<c[e].balance<<endl;
+return 0;
+}
+int withdrawal(int e){
+
+int Max_Withdrawal=2000;
+int UNITS[3] = { 50, 100, 200 };
+int withdrawalamount;
+
+cout << "Enter the withdrawal amount : ";
+cin >> withdrawalamount;
+
+if (c[e].block==0&&withdrawalamount <=
+Max_Withdrawal&&withdrawalamount<=c[e].balance)
+{
+int num2;
+cout << "Withdrawal successful. You withdrew: " << withdrawalamount
+<< "$" << endl;
+cout << "Choose from The Units (50,100 or 200): ";
+cin >> num2;
+c[e].balance = c[e].balance - withdrawalamount;
+c[e].block=1;
+cout << "Your current balance is : " << c[e].balance << " $" << endl;
+
+}
+else {
+cout << "Withdrawal amount exceeds daily limit of 2000.00$ ,please try again." << endl;
+withdrawal(e);
+}
+return 0;
+
+}
+
+int main()
+{
+string name;
+int withdrawalamount;
+int e;
+int pin;
+int exit;
+int passcheck;
+int h = 0, i;
+
+int lf=0;
+label:
+string x;
+cout << "If you are a new client write yes\n";
+cin >> x;
+if (x == "yes")
+{
+//sign in
+if (h == 0)
+{
+
+h++;
+i = 0;
+
+cout << "PLease enter your name\n";
+cin >> c[i].name;
+cout << "Enter your balance ";
+cin >> c[i].balance;
+label3:
+cout << "Enter your pin code\n";
+cin >> c[i].pin;
+cout << "Enter your pin code again\n";
+cin >> passcheck;
+if (passcheck == c[i].pin)
+{
+e = i;
+cout << "Welcome ";
+goto label2;//i=0 is finished
+}
+else {
+cout << "Your password is not matching. Please try again.\n";
+
+goto label3;
+
+}
+}
+else
+{
+
+cout << "PLease enter your name\n";
+cin >> c[i].name;
+cout << "Enter your balance ";
+cin >> c[i].balance;
+label4:
+cout << "Enter your pin code\n";
+cin >> c[i].pin;
+cout << "Enter your pin code again\n";
+cin >> passcheck;
+if (passcheck == c[i].pin)
+{
+e = i;
+cout << "Welcome ";
+goto label2;//if reached then it goes to the menu where the client can choose which seƫng to use
+i++;
+}
+else{ cout << "Your password is not matching ,please try again.\n";
+goto label4;
+
+}
+
+}
+}
+else
+
+{
+while(lf<3){
+lf++;
+
+cout << "Login ";
+
+cout << "Name: ";
+cin >> name;
+
+cout << "Pin Code: ";
+cin >> pin;
+for (int n = 0; n < 10; n++) {
+if (name == c[n].name && pin == c[n].pin) {
+e = n;
+cout << "welcome\n";
+goto label2 ; //if reached then it goes to the menu where the client can choose which seƫng to use
+}
+}
+
+}
+
+cout<<"Call customer service as there is a problem with either your username or password"<<endl;
+
+label2:
+cout<<"Choose 1,2,3,4 depending on what you want to do.\n1.Balance Checking\n2.Whithdrawal\n3.Money Transfer\n4.Logout"<<endl;
+
+int num1;
+cin >> num1;
+if(num1!=4){
+switch (num1){
+case 1:balance(e);
+break;
+case 2:
+withdrawal(e);
+break;
+case 3:
+string ques;
+string name1;
+int moneytransfer;
+int te;
+int q=0;
+do{
+cout<<"Please enter the name of the client you want to transfer money to : ";
+cin>>name1;
+for (int r = 0; r < 10; r++)
+{
+if (name1 == c[r].name)
+{
+te = r;
+}
+
+}
+
+cout<<"Enter the amount of money you want to transfer on the condiƟon that it is no higher than 10000\n";
+cin>>moneytransfer;
+if(moneytransfer<=10000&&moneytransfer<=c[e].balance)
+
+{
+c[e].balance-=moneytransfer;
+
+balance(e);
+
+}else
+{
+cout<<"Either your balance is lower than requested transfer amount or the transfer amount is higher than 10000 " <<endl ;
+}
+
+cout<<"Do you want to transfer money .Say yes or no.\n" ;
+cin>>ques;
+q+=1;
+}while(ques=="yes"&&q<3);
+
+break;
+}
+
+}
+string choice1;
+cout<<"Do you want to do another operaƟon. ";
+cin>>choice1 ;
+if(choice1=="yes"){
+goto label2;
+}
+
+//how to exit the code
+cout << "1(new user) or 0(exit)";
+cin >> exit;
+if (exit == 1) {
+goto label;//this is what sends the user to the start of the code
+}
+} return 0;
+}#include<iostream>
+using namespace std;
+#include<string.h>
+
+struct client
+{
+string name;
+int pin;
+double balance;
+bool block=0;
+}c[10];//for balance
+int balance(int e){
+cout<<"Your current balance is: "<<c[e].balance<<endl;
+return 0;
+}
+int withdrawal(int e){
+
+int Max_Withdrawal=2000;
+int UNITS[3] = { 50, 100, 200 };
+int withdrawalamount;
+
+cout << "Enter the withdrawal amount : ";
+cin >> withdrawalamount;
+
+if (c[e].block==0&&withdrawalamount <=
+Max_Withdrawal&&withdrawalamount<=c[e].balance)
+{
+int num2;
+cout << "Withdrawal successful. You withdrew: " << withdrawalamount
+<< "$" << endl;
+cout << "Choose from The Units (50,100 or 200): ";
+cin >> num2;
+c[e].balance = c[e].balance - withdrawalamount;
+c[e].block=1;
+cout << "Your current balance is : " << c[e].balance << " $" << endl;
+
+}
+else {
+cout << "Withdrawal amount exceeds daily limit of 2000.00$ ,please try again." << endl;
+withdrawal(e);
+}
+return 0;
+
+}
+
+int main()
+{
+string name;
+int withdrawalamount;
+int e;
+int pin;
+int exit;
+int passcheck;
+int h = 0, i;
+
+int lf=0;
+label:
+string x;
+cout << "If you are a new client write yes\n";
+cin >> x;
+if (x == "yes")
+{
+//sign in
+if (h == 0)
+{
+
+h++;
+i = 0;
+
+cout << "PLease enter your name\n";
+cin >> c[i].name;
+cout << "Enter your balance ";
+cin >> c[i].balance;
+label3:
+cout << "Enter your pin code\n";
+cin >> c[i].pin;
+cout << "Enter your pin code again\n";
+cin >> passcheck;
+if (passcheck == c[i].pin)
+{
+e = i;
+cout << "Welcome ";
+goto label2;//i=0 is finished
+}
+else {
+cout << "Your password is not matching. Please try again.\n";
+
+goto label3;
+
+}
+}
+else
+{
+
+cout << "PLease enter your name\n";
+cin >> c[i].name;
+cout << "Enter your balance ";
+cin >> c[i].balance;
+label4:
+cout << "Enter your pin code\n";
+cin >> c[i].pin;
+cout << "Enter your pin code again\n";
+cin >> passcheck;
+if (passcheck == c[i].pin)
+{
+e = i;
+cout << "Welcome ";
+goto label2;//if reached then it goes to the menu where the client can choose which seƫng to use
+i++;
+}
+else{ cout << "Your password is not matching ,please try again.\n";
+goto label4;
+
+}
+
+}
+}
+else
+
+{
+while(lf<3){
+lf++;
+
+cout << "Login ";
+
+cout << "Name: ";
+cin >> name;
+
+cout << "Pin Code: ";
+cin >> pin;
+for (int n = 0; n < 10; n++) {
+if (name == c[n].name && pin == c[n].pin) {
+e = n;
+cout << "welcome\n";
+goto label2 ; //if reached then it goes to the menu where the client can choose which seƫng to use
+}
+}
+
+}
+
+cout<<"Call customer service as there is a problem with either your username or password"<<endl;
+
+label2:
+cout<<"Choose 1,2,3,4 depending on what you want to do.\n1.Balance Checking\n2.Whithdrawal\n3.Money Transfer\n4.Logout"<<endl;
+
+int num1;
+cin >> num1;
+if(num1!=4){
+switch (num1){
+case 1:balance(e);
+break;
+case 2:
+withdrawal(e);
+break;
+case 3:
+string ques;
+string name1;
+int moneytransfer;
+int te;
+int q=0;
+do{
+cout<<"Please enter the name of the client you want to transfer money to : ";
+cin>>name1;
+for (int r = 0; r < 10; r++)
+{
+if (name1 == c[r].name)
+{
+te = r;
+}
+
+}
+
+cout<<"Enter the amount of money you want to transfer on the condiƟon that it is no higher than 10000\n";
+cin>>moneytransfer;
+if(moneytransfer<=10000&&moneytransfer<=c[e].balance)
+
+{
+c[e].balance-=moneytransfer;
+
+balance(e);
+
+}else
+{
+cout<<"Either your balance is lower than requested transfer amount or the transfer amount is higher than 10000 " <<endl ;
+}
+
+cout<<"Do you want to transfer money .Say yes or no.\n" ;
+cin>>ques;
+q+=1;
+}while(ques=="yes"&&q<3);
+
+break;
+}
+
+}
+string choice1;
+cout<<"Do you want to do another operaƟon. ";
+cin>>choice1 ;
+if(choice1=="yes"){
+goto label2;
+}
+
+//how to exit the code
+cout << "1(new user) or 0(exit)";
+cin >> exit;
+if (exit == 1) {
+goto label;//this is what sends the user to the start of the code
+}
+} return 0;
+}
